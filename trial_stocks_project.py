@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import openai
 import os
 
-os.environ['openAI_key'] = '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' 
+os.environ['openAI_key'] = 'openAI_key' 
 openai.api_key = os.getenv('openAI_key')
 
 url = 'https://en.wikipedia.org/wiki/Apple_Inc.'
