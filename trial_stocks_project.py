@@ -35,9 +35,37 @@ def getLongDescr(contents):
 
     return long_descr
 
+def create_sdescr(company_name, long_descr):
+    prompt = f"Reword the following input paragraph into a concise company description, about the company, {company_name}:" \
+             f"Focus on paraphrasing, using synonyms, and restructuring sentences to create a new, unique description.\n\n" \
+             f"Be sure to retain the key information about the company, its products/services, and its target markets.\n" \
+             f"Ensure that this short description is only 1 sentence long.\n" \
+             f"Original Description:\n" \
+             f"[{long_descr}]\n"
+
+
+    messages = [
+        {'role':'system','content':'Answer as concisely as possible.'},
+        {'role':'user', 'content': prompt}
+    ]
+
+    response = openai.ChatCompletion.create(
+        model = 'gpt-3.5-turbo',
+        messages = messages,
+        temperature = 0.8, 
+        top_p = 1, 
+        max_tokens = 500, 
+        n = 1, 
+        frequency_penalty = 1, 
+        presence_penalty = 1, 
+    )
+
+    return response['choices'][0].message.content
+
 def create_ldescr(company_name, long_descr):
     prompt = f"Using the following paragraph about the company, {company_name}, reword the description while maintaining the overall meaning and context. " \
              f"Focus on paraphrasing, using synonyms, and restructuring sentences to create a new, unique description.\n\n" \
+             f"Be sure to retain the key information about the company, its products/services, and its target markets.\n" \
              f"Original Description:\n" \
              f"[{long_descr}]\n"
 
@@ -65,11 +93,13 @@ contents = getDescription(url)
 #short_descr = getShortDescr(contents)
 long_descr = getLongDescr(contents)
 
-final_ldescr = create_ldescr(company_name, long_descr)
+final_sdescr = create_sdescr(company_name, long_descr)
+#final_ldescr = create_ldescr(company_name, long_descr)
 
 #print("short descr: "+ short_descr)
 #print("long descr: "+ long_descr)
 
-print("final ldescr: "+ final_ldescr)
+print("final sdescr: "+ final_sdescr)
+#print("final ldescr: "+ final_ldescr)
 
 #print(company_name)
