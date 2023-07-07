@@ -3,8 +3,11 @@ from bs4 import BeautifulSoup
 import openai
 import os
 
-os.environ['openAI_key'] = 'openAI_key' 
-openai.api_key = os.getenv('openAI_key')
+with open('key.txt','r') as f:
+        api_key = f.read().strip('\n')
+        assert api_key.startswith('sk-'), "Error loading your OpenAI API key from key.txt."
+
+openai.api_key = api_key
 
 url = 'https://en.wikipedia.org/wiki/Apple_Inc.'
 response = requests.get(url)
@@ -36,10 +39,9 @@ def getLongDescr(contents):
     return long_descr
 
 def create_sdescr(company_name, long_descr):
-    prompt = f"Reword the following input paragraph into a concise company description, about the company, {company_name}:" \
+    prompt = f"Reword the following input paragraph into a ONE SENTENCE company description, about the company, {company_name}:" \
              f"Focus on paraphrasing, using synonyms, and restructuring sentences to create a new, unique description.\n\n" \
              f"Be sure to retain the key information about the company, its products/services, and its target markets.\n" \
-             f"Ensure that this short description is only 1 sentence long.\n" \
              f"Original Description:\n" \
              f"[{long_descr}]\n"
 
@@ -90,16 +92,17 @@ def create_ldescr(company_name, long_descr):
 
 company_name = getName(url)
 contents = getDescription(url)
-#short_descr = getShortDescr(contents)
+short_descr = getShortDescr(contents)
 long_descr = getLongDescr(contents)
 
 final_sdescr = create_sdescr(company_name, long_descr)
-#final_ldescr = create_ldescr(company_name, long_descr)
+final_ldescr = create_ldescr(company_name, long_descr)
 
 #print("short descr: "+ short_descr)
 #print("long descr: "+ long_descr)
 
 print("final sdescr: "+ final_sdescr)
-#print("final ldescr: "+ final_ldescr)
+print("\n")
+print("final ldescr: "+ final_ldescr)
 
 #print(company_name)
