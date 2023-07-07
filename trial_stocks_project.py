@@ -101,6 +101,7 @@ final_ldescr = create_ldescr(company_name, long_descr)
 #print("short descr: "+ short_descr)
 #print("long descr: "+ long_descr)
 
+print("\n")
 print("final sdescr: "+ final_sdescr)
 print("\n")
 print("final ldescr: "+ final_ldescr)
